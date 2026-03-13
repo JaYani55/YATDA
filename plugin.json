@@ -1,0 +1,71 @@
+{
+  "id": "yatda",
+  "name": "YATDA",
+  "version": "1.0.0",
+  "description": "Yet Another ToDo App — Kanban/List/Gantt/Calendar task management with Google Tasks sync",
+  "author": "JaYani55",
+  "license": "MIT",
+  "repository": "https://github.com/JaYani55/YATDA",
+  "entrypoint": "src/index.tsx",
+  "api_entrypoint": "api/index.ts",
+  "migrations": [
+    "migrations/001_create_extensions.sql",
+    "migrations/002_create_connectors.sql",
+    "migrations/003_create_users.sql",
+    "migrations/004_create_workspaces.sql",
+    "migrations/005_create_workspace_members.sql",
+    "migrations/006_create_categories.sql",
+    "migrations/007_create_category_users.sql",
+    "migrations/008_create_tickets.sql",
+    "migrations/009_create_ticket_assignees.sql",
+    "migrations/010_create_milestones.sql",
+    "migrations/011_create_comments.sql",
+    "migrations/012_create_connector_credentials.sql",
+    "migrations/013_create_external_task_map.sql",
+    "migrations/014_enable_rls.sql"
+  ],
+  "config_schema": [
+    {
+      "key": "google_client_id",
+      "type": "string",
+      "label": "Google Client ID",
+      "description": "OAuth 2.0 Client ID from Google Cloud Console",
+      "required": false
+    },
+    {
+      "key": "google_client_secret",
+      "type": "secret",
+      "label": "Google Client Secret",
+      "description": "OAuth 2.0 Client Secret from Google Cloud Console",
+      "required": false
+    },
+    {
+      "key": "google_redirect_uri",
+      "type": "string",
+      "label": "Google OAuth Redirect URI",
+      "description": "Must match the URI registered in Google Cloud Console (e.g. https://your-cms.com/api/plugins/yatda/connectors/google-tasks/callback)",
+      "required": false
+    },
+    {
+      "key": "token_encryption_key",
+      "type": "secret",
+      "label": "Token Encryption Key",
+      "description": "Random secret used to AES-GCM-encrypt stored OAuth tokens (min 32 chars)",
+      "required": false
+    }
+  ],
+  "required_npm_dependencies": {
+    "@dnd-kit/core": "^6.1.0",
+    "@dnd-kit/sortable": "^7.0.0",
+    "@dnd-kit/utilities": "^3.2.0",
+    "@fullcalendar/core": "^6.1.0",
+    "@fullcalendar/daygrid": "^6.1.0",
+    "@fullcalendar/timegrid": "^6.1.0",
+    "@fullcalendar/interaction": "^6.1.0",
+    "@fullcalendar/react": "^6.1.0",
+    "@tanstack/react-query": "^5.0.0",
+    "@tanstack/react-table": "^8.20.0",
+    "gantt-task-react": "^0.3.9",
+    "zustand": "^4.5.0"
+  }
+}

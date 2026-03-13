@@ -1,16 +1,12 @@
 {
   "name": "yatda",
-  "version": "0.1.0",
-  "private": true,
-  "packageManager": "pnpm@9.0.0",
-  "workspaces": [
-    "packages/*"
-  ],
-  "scripts": {
-    "dev": "pnpm --parallel -r dev",
-    "dev:local": "pnpm --parallel -r dev:local",
-    "build": "pnpm -r build",
-    "type-check": "pnpm -r type-check",
-    "lint": "pnpm -r lint"
-  }
+  "version": "1.0.0",
+  "description": "Yet Another ToDo App — Kanban/List/Gantt/Calendar task management CMS plugin",
+  "author": "JaYani55",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JaYani55/YATDA"
+  },
+  "private": true
 }
