@@ -1,0 +1,43 @@
+.wrapper { padding: 16px 0; }
+
+.toolbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.modeBtn {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  padding: 5px 14px;
+  font-size: 12px;
+  text-transform: capitalize;
+  transition: all 0.1s;
+}
+.modeBtn:hover { border-color: var(--accent); color: var(--text); }
+.modeBtn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+.ganttWrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+/* Override gantt-task-react to match dark theme */
+.ganttWrap :global(._2dZTy) { background: var(--surface) !important; }
+.ganttWrap :global(._9w8d5) { fill: var(--border) !important; }
+.ganttWrap :global(.gantt-task-row:nth-child(even)) { fill: var(--surface-2) !important; }
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 300px;
+  color: var(--text-muted);
+  font-size: 14px;
+}

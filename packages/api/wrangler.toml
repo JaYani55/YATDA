@@ -1,0 +1,40 @@
+name = "yatda-api"
+main = "src/index.ts"
+compatibility_date = "2024-06-20"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+SUPABASE_URL = "https://your-project.supabase.co"
+SUPABASE_ANON_KEY = ""   # set via wrangler secret
+SUPABASE_SERVICE_ROLE_KEY = ""  # set via wrangler secret
+GOOGLE_CLIENT_ID = ""    # set via wrangler secret
+GOOGLE_CLIENT_SECRET = ""  # set via wrangler secret
+GOOGLE_REDIRECT_URI = "https://your-worker.workers.dev/api/connectors/google-tasks/callback"
+
+# Scheduled sync: every 15 minutes
+[[triggers.crons]]
+crons = ["*/15 * * * *"]
+
+[dev]
+port = 8787
+local_protocol = "http"
+
+# ─── Local-test environment ─────────────────────────────────────────────────
+# Run with: pnpm dev:local  (i.e. wrangler dev --env localtest)
+# All values are intentionally non-secret placeholders — no real credentials
+# are required.  The app uses an in-memory store instead of Supabase.
+[env.localtest]
+name = "yatda-api-localtest"
+
+[env.localtest.vars]
+LOCAL_TEST              = "true"
+SUPABASE_URL            = "http://localhost:54321"
+SUPABASE_ANON_KEY       = "localtest-anon-key"
+SUPABASE_SERVICE_ROLE_KEY = "localtest-service-role-key"
+GOOGLE_CLIENT_ID        = "localtest"
+GOOGLE_CLIENT_SECRET    = "localtest"
+GOOGLE_REDIRECT_URI     = "http://localhost:8787/api/connectors/google-tasks/callback"
+TOKEN_ENCRYPTION_KEY    = "localtest-encryption-key-min-32-chars!!"
+
+[[env.localtest.triggers.crons]]
+crons = ["*/15 * * * *"]

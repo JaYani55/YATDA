@@ -1,0 +1,86 @@
+.sidebar {
+  width: 220px;
+  min-width: 220px;
+  height: 100vh;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 16px 12px;
+  overflow-y: auto;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--accent);
+  padding: 4px 8px 16px;
+  letter-spacing: -0.5px;
+}
+
+.section { margin-bottom: 24px; }
+
+.sectionLabel {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  padding: 0 8px 6px;
+}
+
+.wsBtn, .navBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  background: none;
+  border: none;
+  border-radius: var(--radius);
+  color: var(--text);
+  padding: 7px 8px;
+  font-size: 13px;
+  text-align: left;
+  transition: background 0.1s;
+}
+.wsBtn:hover, .navBtn:hover { background: var(--surface-2); }
+.wsBtn.active, .navBtn.active { background: var(--accent); color: #fff; }
+
+.wsIcon { font-size: 16px; }
+.wsName { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.personalBadge {
+  font-size: 10px;
+  background: rgba(99,102,241,0.2);
+  color: var(--accent);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+.wsBtn.active .personalBadge { background: rgba(255,255,255,0.2); color: #fff; }
+
+.spacer { flex: 1; }
+
+.userSection {
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.userEmail {
+  font-size: 12px;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0 4px;
+}
+.signOutBtn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  padding: 6px 10px;
+  font-size: 12px;
+  transition: all 0.1s;
+}
+.signOutBtn:hover { border-color: var(--danger); color: var(--danger); }
