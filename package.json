@@ -8,5 +8,9 @@
     "type": "git",
     "url": "https://github.com/JaYani55/YATDA"
   },
-  "private": true
+  "private": true,
+  "scripts": {
+    "dev": "pnpm -r --parallel run dev",
+    "dev:local": "pnpm -r --parallel run dev:local"
+  }
 }
