@@ -3,5 +3,5 @@
 
 drop table if exists "YATDA_Comments";
 
--- Drop the trigger function if no longer needed elsewhere
-drop function if exists yatda_set_updated_at();
+-- Drop the trigger function and all dependent triggers
+drop function if exists yatda_set_updated_at() CASCADE;
