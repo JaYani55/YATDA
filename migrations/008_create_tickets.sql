@@ -3,13 +3,17 @@
 -- Phase timestamps record when each status was first entered.
 -- ticket_points: story-point-style effort estimate.
 
-create type ticket_status_enum as enum (
-  'backlog',
-  'assigned',
-  'in_progress',
-  'review',
-  'done'
-);
+do $$ begin
+  if not exists (select 1 from pg_type where typname = 'ticket_status_enum') then
+    create type ticket_status_enum as enum (
+      'backlog',
+      'assigned',
+      'in_progress',
+      'review',
+      'done'
+    );
+  end if;
+end $$;
 
 create table "YATDA_Tickets" (
   ticket_id          uuid primary key default uuid_generate_v4(),
@@ -43,6 +47,7 @@ create index idx_tickets_status on "YATDA_Tickets" (workspace_id, ticket_status)
 create index idx_tickets_due on "YATDA_Tickets" (ticket_due) where ticket_due is not null;
 create index idx_tickets_category on "YATDA_Tickets" (category_id);
 
+drop trigger if exists trg_yatda_tickets_updated_at on "YATDA_Tickets";
 create trigger trg_yatda_tickets_updated_at
   before update on "YATDA_Tickets"
   for each row execute function yatda_set_updated_at();
@@ -69,6 +74,7 @@ begin
 end;
 $$;
 
+drop trigger if exists trg_yatda_ticket_phase_stamp on "YATDA_Tickets";
 create trigger trg_yatda_ticket_phase_stamp
   before insert or update of ticket_status on "YATDA_Tickets"
   for each row execute function yatda_stamp_phase_timestamp();

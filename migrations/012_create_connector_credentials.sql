@@ -24,6 +24,7 @@ comment on table "YATDA_Connector_Credentials" is 'AES-GCM encrypted OAuth token
 comment on column "YATDA_Connector_Credentials".access_token  is 'AES-GCM-256 ciphertext: "<ivBase64>:<ciphertextBase64>"';
 comment on column "YATDA_Connector_Credentials".refresh_token is 'AES-GCM-256 ciphertext: "<ivBase64>:<ciphertextBase64>"';
 
+drop trigger if exists trg_yatda_credentials_updated_at on "YATDA_Connector_Credentials";
 create trigger trg_yatda_credentials_updated_at
   before update on "YATDA_Connector_Credentials"
   for each row execute function yatda_set_updated_at();

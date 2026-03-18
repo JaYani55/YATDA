@@ -18,6 +18,7 @@ comment on table "YATDA_Milestones" is 'Dated milestones shown on the board time
 
 create index idx_milestones_workspace on "YATDA_Milestones" (workspace_id, milestone_date);
 
+drop trigger if exists trg_yatda_milestones_updated_at on "YATDA_Milestones";
 create trigger trg_yatda_milestones_updated_at
   before update on "YATDA_Milestones"
   for each row execute function yatda_set_updated_at();

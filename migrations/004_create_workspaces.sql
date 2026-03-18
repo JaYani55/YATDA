@@ -16,6 +16,7 @@ create table "YATDA_Workspaces" (
 comment on table "YATDA_Workspaces" is 'Personal or shared team task boards';
 comment on column "YATDA_Workspaces".is_personal is 'True = single-user personal board; False = shared team workspace';
 
+drop trigger if exists trg_yatda_workspaces_updated_at on "YATDA_Workspaces";
 create trigger trg_yatda_workspaces_updated_at
   before update on "YATDA_Workspaces"
   for each row execute function yatda_set_updated_at();
@@ -30,6 +31,7 @@ begin
 end;
 $$;
 
+drop trigger if exists trg_yatda_personal_workspace on "YATDA_Users";
 create trigger trg_yatda_personal_workspace
   after insert on "YATDA_Users"
   for each row execute function yatda_create_personal_workspace();

@@ -29,6 +29,7 @@ begin
 end;
 $$;
 
+drop trigger if exists trg_yatda_users_updated_at on "YATDA_Users";
 create trigger trg_yatda_users_updated_at
   before update on "YATDA_Users"
   for each row execute function yatda_set_updated_at();
@@ -49,6 +50,7 @@ begin
 end;
 $$;
 
+drop trigger if exists trg_on_auth_user_created on auth.users;
 create trigger trg_on_auth_user_created
   after insert on auth.users
   for each row execute function yatda_handle_new_user();

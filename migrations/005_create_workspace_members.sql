@@ -26,6 +26,7 @@ begin
 end;
 $$;
 
+drop trigger if exists trg_yatda_workspace_owner_member on "YATDA_Workspaces";
 create trigger trg_yatda_workspace_owner_member
   after insert on "YATDA_Workspaces"
   for each row execute function yatda_add_owner_as_member();

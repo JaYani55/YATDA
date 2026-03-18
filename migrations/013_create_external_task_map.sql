@@ -25,6 +25,7 @@ comment on column "YATDA_External_Task_Map".sync_hash is 'Hash of last-seen exte
 create index idx_external_map_ticket on "YATDA_External_Task_Map" (ticket_id);
 create index idx_external_map_connector_user on "YATDA_External_Task_Map" (connector_id, user_id);
 
+drop trigger if exists trg_yatda_external_map_updated_at on "YATDA_External_Task_Map";
 create trigger trg_yatda_external_map_updated_at
   before update on "YATDA_External_Task_Map"
   for each row execute function yatda_set_updated_at();

@@ -15,6 +15,7 @@ create table "YATDA_Categories" (
 
 comment on table "YATDA_Categories" is 'Labels/categories for grouping tickets within a workspace';
 
+drop trigger if exists trg_yatda_categories_updated_at on "YATDA_Categories";
 create trigger trg_yatda_categories_updated_at
   before update on "YATDA_Categories"
   for each row execute function yatda_set_updated_at();
