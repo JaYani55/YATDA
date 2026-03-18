@@ -53,6 +53,6 @@ export default function BoardHeader({ ticketCount }: Props) {
 const VIEW_ICONS: Record<string, string> = {
   kanban: "⊞",
   list: "≡",
-  gantt: "▦",
-  calendar: "▦",
+  gantt: "📊",
+  calendar: "📅",
 };

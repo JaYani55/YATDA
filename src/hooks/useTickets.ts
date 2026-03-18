@@ -32,7 +32,8 @@ export function useCreateTicket(workspaceId: string) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (body: CreateTicketBody) => ticketsApi.create(body),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["tickets", workspaceId] }),
+    // Invalidate all ticket queries for this workspace (including filtered queries)
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["tickets", workspaceId], exact: false }),
   });
 }
 
@@ -42,12 +43,16 @@ export function useUpdateTicket(workspaceId: string) {
     mutationFn: ({ id, body }: { id: string; body: Partial<CreateTicketBody & { sort_order: number }> }) =>
       ticketsApi.update(id, body),
     onMutate: async ({ id, body }) => {
-      // Optimistic update for status changes (critical for drag & drop feel)
-      await qc.cancelQueries({ queryKey: ["tickets", workspaceId] });
-      const prev = qc.getQueryData<Ticket[]>(["tickets", workspaceId]);
+      // Optimistic update for status changes across all cache keys (including filtered queries)
+      // Use prefix match to target ["tickets", workspaceId, ...] with any filter combination
+      await qc.cancelQueries({ queryKey: ["tickets", workspaceId], exact: false });
+      
+      // Get the unfiltered cache data for optimistic update
+      const cacheKey = ["tickets", workspaceId, undefined, undefined];
+      const prev = qc.getQueryData<Ticket[]>(cacheKey);
       if (prev) {
         qc.setQueryData<Ticket[]>(
-          ["tickets", workspaceId],
+          cacheKey,
           prev.map((t) => (t.ticket_id === id ? { ...t, ...body } : t))
         );
       }
@@ -56,7 +61,7 @@ export function useUpdateTicket(workspaceId: string) {
     onError: (_err, _vars, ctx) => {
       if (ctx?.prev) qc.setQueryData(["tickets", workspaceId], ctx.prev);
     },
-    onSettled: () => qc.invalidateQueries({ queryKey: ["tickets", workspaceId] }),
+    onSettled: () => qc.invalidateQueries({ queryKey: ["tickets", workspaceId], exact: false }),
   });
 }
 

@@ -32,7 +32,7 @@ const googleTasks = new Hono<{ Bindings: PluginEnv }>();
 googleTasks.get("/auth", async (c) => {
   const token = c.req.header("Authorization")?.slice(7) ?? "";
   const userId = getUserIdFromToken(token);
-  const adminClient = getSupabaseAdminClient(c.env);
+  const adminClient = await getSupabaseAdminClient(c.env);
 
   const cfg = await getPluginConfig(adminClient);
   if (!isConfigured(cfg)) {
@@ -71,7 +71,7 @@ googleTasks.get("/callback", async (c) => {
     return c.json({ error: "Invalid state parameter" }, 400);
   }
 
-  const adminClient = getSupabaseAdminClient(c.env);
+  const adminClient = await getSupabaseAdminClient(c.env);
 
   const cfg = await getPluginConfig(adminClient);
   if (!isConfigured(cfg)) {
@@ -125,7 +125,7 @@ googleTasks.get("/callback", async (c) => {
 googleTasks.post("/sync", async (c) => {
   const token = c.req.header("Authorization")?.slice(7) ?? "";
   const userId = getUserIdFromToken(token);
-  const adminClient = getSupabaseAdminClient(c.env);
+  const adminClient = await getSupabaseAdminClient(c.env);
 
   const cfg = await getPluginConfig(adminClient);
   if (!isConfigured(cfg)) {
@@ -141,9 +141,9 @@ googleTasks.get("/status", async (c) => {
   const token = c.req.header("Authorization")?.slice(7) ?? "";
   const userId = getUserIdFromToken(token);
   const supabase = getSupabaseClient(c.env, token);
-  const adminClient = getSupabaseAdminClient(c.env);
 
-  const { data: connector } = await adminClient
+  // YATDA_Connectors is readable by any authenticated user (RLS: connectors_select_authenticated)
+  const { data: connector } = await supabase
     .from("YATDA_Connectors")
     .select("connector_id")
     .eq("connector_slug", GOOGLE_CONNECTOR_SLUG)
@@ -166,9 +166,9 @@ googleTasks.delete("/disconnect", async (c) => {
   const token = c.req.header("Authorization")?.slice(7) ?? "";
   const userId = getUserIdFromToken(token);
   const supabase = getSupabaseClient(c.env, token);
-  const adminClient = getSupabaseAdminClient(c.env);
 
-  const { data: connector } = await adminClient
+  // YATDA_Connectors is readable by any authenticated user (RLS: connectors_select_authenticated)
+  const { data: connector } = await supabase
     .from("YATDA_Connectors")
     .select("connector_id")
     .eq("connector_slug", GOOGLE_CONNECTOR_SLUG)
@@ -195,7 +195,7 @@ export async function runSync(
     token_encryption_key: string;
   }
 ): Promise<void> {
-  const serviceClient = getSupabaseAdminClient(env);
+  const serviceClient = await getSupabaseAdminClient(env);
 
   const { data: connector } = await serviceClient
     .from("YATDA_Connectors")

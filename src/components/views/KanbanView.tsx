@@ -39,6 +39,7 @@ export default function KanbanView({ tickets, workspaceId }: Props) {
   const { searchQuery } = useUIStore();
   const updateTicket = useUpdateTicket(workspaceId);
   const [activeTicket, setActiveTicket] = useState<Ticket | null>(null);
+  const [pendingStatusChange, setPendingStatusChange] = useState<Record<string, TicketStatus>>({});
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
@@ -86,28 +87,46 @@ export default function KanbanView({ tickets, workspaceId }: Props) {
     const overTicket = tickets.find((t) => t.ticket_id === overId);
     const targetStatus = overColumn?.id ?? overTicket?.ticket_status;
 
-    if (targetStatus && activeTicketItem.ticket_status !== targetStatus) {
-      updateTicket.mutate({ id: activeId, body: { ticket_status: targetStatus } });
+    // Track pending status change in local state (don't mutation yet)
+    if (targetStatus && targetStatus !== activeTicketItem.ticket_status) {
+      setPendingStatusChange((prev) => ({ ...prev, [activeId]: targetStatus }));
     }
   }
 
   function handleDragEnd(event: DragEndEvent) {
     setActiveTicket(null);
     const { active, over } = event;
-    if (!over || active.id === over.id) return;
+    if (!over) {
+      setPendingStatusChange({});
+      return;
+    }
 
     const activeId = active.id as string;
     const overId = over.id as string;
 
+    // Commit the pending status change if one exists
+    const newStatus = pendingStatusChange[activeId];
+    if (newStatus) {
+      updateTicket.mutate({ id: activeId, body: { ticket_status: newStatus } });
+      setPendingStatusChange({});
+      return;
+    }
+
+    // If same column: handle reordering
     const activeItem = tickets.find((t) => t.ticket_id === activeId);
     const overItem = tickets.find((t) => t.ticket_id === overId);
-    if (!activeItem || !overItem || activeItem.ticket_status !== overItem.ticket_status)
+    if (!activeItem || !overItem || activeItem.ticket_status !== overItem.ticket_status) {
+      setPendingStatusChange({});
       return;
+    }
 
     const colTickets: Ticket[] = columnMap.get(activeItem.ticket_status) ?? [];
     const oldIdx = colTickets.findIndex((t) => t.ticket_id === activeId);
     const newIdx = colTickets.findIndex((t) => t.ticket_id === overId);
-    if (oldIdx === -1 || newIdx === -1) return;
+    if (oldIdx === -1 || newIdx === -1) {
+      setPendingStatusChange({});
+      return;
+    }
 
     const reordered = arrayMove(colTickets, oldIdx, newIdx);
     reordered.forEach((t, i) => {
@@ -115,6 +134,7 @@ export default function KanbanView({ tickets, workspaceId }: Props) {
         updateTicket.mutate({ id: t.ticket_id, body: { sort_order: i } });
       }
     });
+    setPendingStatusChange({});
   }
 
   return (

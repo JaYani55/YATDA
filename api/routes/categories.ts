@@ -53,7 +53,13 @@ categories.post("/", async (c) => {
       category_color: body.category_color ?? "#6366f1",
       category_description: body.category_description,
     })
-    .select()
+    .select(`
+      *,
+      assigned_users:YATDA_Category_Users(
+        user_id,
+        user:YATDA_Users(user_id, username, display_name, avatar_url)
+      )
+    `)
     .single();
 
   if (error) return c.json({ error: error.message }, 500);
@@ -102,7 +108,13 @@ categories.patch("/:id", async (c) => {
 
   const { data, error } = await supabase
     .from("YATDA_Categories")
-    .select("*")
+    .select(`
+      *,
+      assigned_users:YATDA_Category_Users(
+        user_id,
+        user:YATDA_Users(user_id, username, display_name, avatar_url)
+      )
+    `)
     .eq("category_id", id)
     .single();
 

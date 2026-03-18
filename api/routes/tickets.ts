@@ -99,7 +99,15 @@ tickets.post("/", async (c) => {
       category_id: body.category_id,
       created_by: userId,
     })
-    .select()
+    .select(`
+      *,
+      assignees:YATDA_Ticket_Assignees(
+        user_id,
+        assigned_at,
+        user:YATDA_Users(user_id, username, display_name, avatar_url)
+      ),
+      category:YATDA_Categories(category_id, category_name, category_color)
+    `)
     .single();
 
   if (error) return c.json({ error: error.message }, 500);
@@ -165,7 +173,15 @@ tickets.patch("/:id", async (c) => {
 
   const { data, error } = await supabase
     .from("YATDA_Tickets")
-    .select("*")
+    .select(`
+      *,
+      assignees:YATDA_Ticket_Assignees(
+        user_id,
+        assigned_at,
+        user:YATDA_Users(user_id, username, display_name, avatar_url)
+      ),
+      category:YATDA_Categories(category_id, category_name, category_color)
+    `)
     .eq("ticket_id", id)
     .single();
 

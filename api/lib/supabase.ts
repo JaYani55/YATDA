@@ -1,23 +1,35 @@
 import { createClient } from "@supabase/supabase-js";
 
-export interface PluginEnv {
-  SUPABASE_URL: string;
-  SUPABASE_ANON_KEY: string;
-  SUPABASE_SERVICE_KEY: string;
+/** Cloudflare Secrets Store binding — value is not available at import time. */
+interface SecretsStoreBinding {
+  get(): Promise<string>;
 }
 
-/** User-scoped Supabase client — respects RLS using the caller's JWT. */
+export interface PluginEnv {
+  SUPABASE_URL: string;
+  /** Plain environment variable (set via .dev.vars locally, wrangler vars in production). */
+  SUPABASE_PUBLISHABLE_KEY: string;
+  /** Cloudflare Secrets Store binding — call `.get()` to retrieve the value. */
+  SS_SUPABASE_SECRET_KEY: SecretsStoreBinding;
+}
+
+/** User-scoped Supabase client — respects RLS using the caller's JWT.
+ *  Use this for ALL user-facing route handlers. */
 export function getSupabaseClient(env: PluginEnv, token: string) {
-  return createClient(env.SUPABASE_URL, env.SUPABASE_ANON_KEY, {
-    auth: { persistSession: false },
+  return createClient(env.SUPABASE_URL, env.SUPABASE_PUBLISHABLE_KEY, {
+    auth: { autoRefreshToken: false, persistSession: false },
     global: { headers: { Authorization: `Bearer ${token}` } },
   });
 }
 
-/** Service-role Supabase client — bypasses RLS; use only in trusted server contexts. */
-export function getSupabaseAdminClient(env: PluginEnv) {
-  return createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_KEY, {
-    auth: { persistSession: false },
+/** Service-role Supabase client — bypasses RLS entirely.
+ *  Use ONLY for privileged bootstrap operations (e.g. POST /users/me/ensure)
+ *  and OAuth credential storage where no user JWT is available.
+ *  Async because SS_SUPABASE_SECRET_KEY is a Cloudflare Secrets Store binding. */
+export async function getSupabaseAdminClient(env: PluginEnv) {
+  const key = await env.SS_SUPABASE_SECRET_KEY.get();
+  return createClient(env.SUPABASE_URL, key, {
+    auth: { autoRefreshToken: false, persistSession: false },
   });
 }
 

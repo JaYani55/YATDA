@@ -1,8 +1,8 @@
 // Supabase client is provided by the CMS at @/lib/supabase
 import { supabase } from "@/lib/supabase";
 
-// Routed under /api/plugins/yatda by the CMS
-const API_BASE = "/api/plugins/yatda";
+// Routed under /api/plugin/yatda by the CMS
+const API_BASE = "/api/plugin/yatda";
 
 async function getAuthHeaders(): Promise<Record<string, string>> {
   const { data } = await supabase.auth.getSession();
@@ -68,6 +68,7 @@ export const workspacesApi = {
 // ─── Users ─────────────────────────────────────────────────────────────────
 export const usersApi = {
   me: () => request<YatdaUser>("/users/me"),
+  ensure: () => request<{ ok: boolean }>("/users/me/ensure", { method: "POST" }),
   updateMe: (body: Partial<YatdaUser>) =>
     request<YatdaUser>("/users/me", { method: "PATCH", body: JSON.stringify(body) }),
 };

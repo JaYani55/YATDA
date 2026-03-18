@@ -44,7 +44,10 @@ workspaces.post("/", async (c) => {
       owner_id: userId,
       is_personal: false,
     })
-    .select()
+    .select(`
+      *,
+      member_count:YATDA_Workspace_Members(count)
+    `)
     .single();
 
   if (error) return c.json({ error: error.message }, 500);
