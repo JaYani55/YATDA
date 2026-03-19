@@ -185,6 +185,13 @@ function KanbanColumn({ column, tickets }: ColProps) {
         />
         <span className={styles.colLabel}>{column.label}</span>
         <span className={styles.colCount}>{tickets.length}</span>
+        <button
+          className={styles.colAddBtn}
+          onClick={() => openTicket(null)}
+          title={`Add task to ${column.label}`}
+        >
+          +
+        </button>
       </div>
 
       <SortableContext

@@ -47,6 +47,18 @@
   padding: 1px 7px;
 }
 
+.colAddBtn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 18px;
+  line-height: 1;
+  padding: 0 4px;
+  border-radius: 4px;
+  transition: background 0.1s, color 0.1s;
+}
+.colAddBtn:hover { background: var(--surface-2); color: var(--text); }
+
 .cards {
   padding: 10px;
   display: flex;

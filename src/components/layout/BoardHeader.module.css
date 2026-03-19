@@ -51,11 +51,11 @@
   transition: all 0.1s;
 }
 .viewBtn:hover { background: var(--border); color: var(--text); }
-.viewBtn.active { background: var(--accent); color: #fff; }
+.viewBtn.active { background: hsl(var(--accent)); color: hsl(var(--accent-foreground)); }
 
 .addBtn {
-  background: var(--accent);
-  color: #fff;
+  background: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
   border: none;
   border-radius: var(--radius);
   padding: 7px 14px;
@@ -64,4 +64,4 @@
   transition: background 0.15s;
   white-space: nowrap;
 }
-.addBtn:hover { background: var(--accent-hover); }
+.addBtn:hover { background: hsl(var(--accent) / 0.85); }
