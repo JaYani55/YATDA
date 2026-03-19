@@ -1,6 +1,6 @@
 -- Migration: YATDA_External_Task_Map
 -- Bidirectional sync mapping: links a YATDA ticket to an external task ID.
--- sync_hash is an MD5 of the external task's serialized fields; used to detect
+-- sync_hash is a SHA-256 hex digest of the external task's serialized fields; used to detect
 -- changes without fetching and comparing full objects every time.
 
 create table "YATDA_External_Task_Map" (
@@ -10,7 +10,7 @@ create table "YATDA_External_Task_Map" (
   user_id          uuid not null references "YATDA_Users" (user_id) on delete cascade,
   external_task_id text not null,    -- e.g. Google Tasks task ID
   external_list_id text,             -- e.g. Google Tasks list ID / tasklist ID
-  sync_hash        text,             -- MD5 / SHA-256 of external task JSON, for change detection
+  sync_hash        text check (sync_hash is null or length(sync_hash) = 64),  -- SHA-256 hex digest, for change detection
   last_synced_at   timestamptz,
   sync_direction   text not null default 'bidirectional'
                      check (sync_direction in ('inbound', 'outbound', 'bidirectional')),

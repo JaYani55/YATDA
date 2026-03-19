@@ -250,7 +250,7 @@ export async function runSync(
     const gTasks = await listTasks(accessToken, taskList.id);
 
     for (const gTask of gTasks) {
-      const syncHash = computeSyncHash(gTask);
+      const syncHash = await computeSyncHash(gTask);
 
       const { data: existing } = await serviceClient
         .from("YATDA_External_Task_Map")

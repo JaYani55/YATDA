@@ -260,7 +260,7 @@ export async function runSync(
     const googleTasks = await listTasks(accessToken, taskList.id);
 
     for (const gTask of googleTasks) {
-      const syncHash = computeSyncHash(gTask);
+      const syncHash = await computeSyncHash(gTask);
 
       // Check if we already have a mapping
       const { data: existing } = await serviceClient

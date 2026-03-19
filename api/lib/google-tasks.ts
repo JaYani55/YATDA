@@ -155,10 +155,14 @@ export async function updateTask(
   return res.json() as Promise<GoogleTask>;
 }
 
-/** Compute a simple sync hash for change detection. */
-export function computeSyncHash(task: GoogleTask): string {
+/** Compute a SHA-256 hex digest of the sync-relevant task fields for change detection. */
+export async function computeSyncHash(task: GoogleTask): Promise<string> {
   const key = `${task.title}|${task.notes ?? ""}|${task.status}|${task.due ?? ""}`;
-  return btoa(encodeURIComponent(key)).slice(0, 32);
+  const encoded = new TextEncoder().encode(key);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", encoded);
+  return Array.from(new Uint8Array(hashBuffer))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
 }
 
 /** Map a Google Task status to a YATDA ticket status. */

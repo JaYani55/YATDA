@@ -60,6 +60,11 @@ create policy "users_update_own"
   using ((select auth.uid()) = user_id)
   with check ((select auth.uid()) = user_id);
 
+create policy "users_insert_own"
+  on "YATDA_Users" for insert
+  to authenticated
+  with check ((select auth.uid()) = user_id);
+
 -- ─── YATDA_Workspaces ──────────────────────────────────────────────────────
 alter table "YATDA_Workspaces" enable row level security;
 
@@ -101,6 +106,12 @@ create policy "wm_delete_admin"
   on "YATDA_Workspace_Members" for delete
   to authenticated
   using (yatda_is_workspace_admin(workspace_id));
+
+create policy "wm_update_admin"
+  on "YATDA_Workspace_Members" for update
+  to authenticated
+  using (yatda_is_workspace_admin(workspace_id))
+  with check (yatda_is_workspace_admin(workspace_id));
 
 -- ─── YATDA_Categories ──────────────────────────────────────────────────────
 alter table "YATDA_Categories" enable row level security;
