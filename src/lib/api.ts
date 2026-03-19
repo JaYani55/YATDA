@@ -28,7 +28,10 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 // ─── Tickets ───────────────────────────────────────────────────────────────
 export const ticketsApi = {
   list: (params: { workspace_id: string; status?: string; category_id?: string }) => {
-    const qs = new URLSearchParams(params as Record<string, string>).toString();
+    const p: Record<string, string> = { workspace_id: params.workspace_id };
+    if (params.status !== undefined) p.status = params.status;
+    if (params.category_id !== undefined) p.category_id = params.category_id;
+    const qs = new URLSearchParams(p).toString();
     return request<Ticket[]>(`/tickets?${qs}`);
   },
   get: (id: string) => request<Ticket>(`/tickets/${id}`),

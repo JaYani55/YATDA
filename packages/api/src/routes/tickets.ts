@@ -30,8 +30,8 @@ tickets.get("/", async (c) => {
     .eq("workspace_id", workspace_id)
     .order("sort_order", { ascending: true });
 
-  if (status) query = query.eq("ticket_status", status);
-  if (category_id) query = query.eq("category_id", category_id);
+  if (status && status !== "undefined") query = query.eq("ticket_status", status);
+  if (category_id && category_id !== "undefined") query = query.eq("category_id", category_id);
 
   const { data, error } = await query;
   if (error) return c.json({ error: error.message }, 500);
