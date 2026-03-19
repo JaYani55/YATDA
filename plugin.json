@@ -22,7 +22,8 @@
     "migrations/011_create_comments.sql",
     "migrations/012_create_connector_credentials.sql",
     "migrations/013_create_external_task_map.sql",
-    "migrations/014_enable_rls.sql"
+    "migrations/014_enable_rls.sql",
+    "migrations/016_name_ticket_assignee_fks.sql"
   ],
   "config_schema": [
     {

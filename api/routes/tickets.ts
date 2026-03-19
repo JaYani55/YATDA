@@ -21,7 +21,7 @@ tickets.get("/", async (c) => {
       assignees:YATDA_Ticket_Assignees(
         user_id,
         assigned_at,
-        user:YATDA_Users!user_id(user_id, username, display_name, avatar_url)
+        user:YATDA_Users!fk_ticket_assignees_assignee(user_id, username, display_name, avatar_url)
       ),
       category:YATDA_Categories(category_id, category_name, category_color)
     `)
@@ -49,7 +49,7 @@ tickets.get("/:id", async (c) => {
       assignees:YATDA_Ticket_Assignees(
         user_id,
         assigned_at,
-        user:YATDA_Users!user_id(user_id, username, display_name, avatar_url)
+        user:YATDA_Users!fk_ticket_assignees_assignee(user_id, username, display_name, avatar_url)
       ),
       category:YATDA_Categories(category_id, category_name, category_color),
       comments:YATDA_Comments(
@@ -104,7 +104,7 @@ tickets.post("/", async (c) => {
       assignees:YATDA_Ticket_Assignees(
         user_id,
         assigned_at,
-        user:YATDA_Users!user_id(user_id, username, display_name, avatar_url)
+        user:YATDA_Users!fk_ticket_assignees_assignee(user_id, username, display_name, avatar_url)
       ),
       category:YATDA_Categories(category_id, category_name, category_color)
     `)
@@ -178,7 +178,7 @@ tickets.patch("/:id", async (c) => {
       assignees:YATDA_Ticket_Assignees(
         user_id,
         assigned_at,
-        user:YATDA_Users!user_id(user_id, username, display_name, avatar_url)
+        user:YATDA_Users!fk_ticket_assignees_assignee(user_id, username, display_name, avatar_url)
       ),
       category:YATDA_Categories(category_id, category_name, category_color)
     `)

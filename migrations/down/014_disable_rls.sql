@@ -7,6 +7,7 @@ drop policy if exists "connectors_select_authenticated" on "YATDA_Connectors";
 drop policy if exists "users_select_own" on "YATDA_Users";
 drop policy if exists "users_select_workspace_peer" on "YATDA_Users";
 drop policy if exists "users_update_own" on "YATDA_Users";
+drop policy if exists "users_insert_own" on "YATDA_Users";
 
 drop policy if exists "workspaces_select_member" on "YATDA_Workspaces";
 drop policy if exists "workspaces_insert_owner" on "YATDA_Workspaces";
@@ -16,6 +17,7 @@ drop policy if exists "workspaces_delete_owner" on "YATDA_Workspaces";
 drop policy if exists "wm_select_member" on "YATDA_Workspace_Members";
 drop policy if exists "wm_insert_admin" on "YATDA_Workspace_Members";
 drop policy if exists "wm_delete_admin" on "YATDA_Workspace_Members";
+drop policy if exists "wm_update_admin" on "YATDA_Workspace_Members";
 
 drop policy if exists "categories_select_member" on "YATDA_Categories";
 drop policy if exists "categories_insert_member" on "YATDA_Categories";
